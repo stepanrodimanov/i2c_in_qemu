@@ -38,7 +38,7 @@ make -j$(nproc)
 ./qemu-system-x86_64 \
     -m 1024 \
     -hda ../images/debian-12-nocloud-amd64.qcow2 \
-    -device my-i2c-device,address=0x60 \
+    -device my-i2c-device,id=i2c,address=0x60 \
     -enable-kvm \
     -nographic \
     -qmp unix:/tmp/qmp.sock,server=on,wait=off
