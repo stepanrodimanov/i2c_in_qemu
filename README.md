@@ -45,11 +45,6 @@ make -j$(nproc)
 ```
 Login: root (no password)
 
-In another terminal
-```
-python qmp.py
-```
-
 Inside the VM:
 ```
 apt update && apt install -y i2c-tools
@@ -58,3 +53,9 @@ i2cdetect -y 0
 i2cget -y 0 0x60 
 i2cset -y 0 0x60 0x11 
 ```
+
+In another terminal
+```
+python qmp.py
+```
+
