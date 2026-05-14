@@ -13,11 +13,11 @@ cd ..
 ## Build QEMU with the I2C device
 
 ```
-git clone https://github.com/qemu/qemu.git
+git clone https://gitlab.com/qemu-project/qemu
 cd qemu
 
-cp <repo>/src/my_i2c_device.c hw/i2c/
-echo "i2c_ss.add(when: 'CONFIG_MY_I2C_DEVICE', if_true: files('my_i2c_device.c'))" >> hw/i2c/meson.build
+cp ../src/my_i2c_device.c hw/i2c/
+sed -i '/system_ss.add_all/i i2c_ss.add(when: '\''CONFIG_MY_I2C_DEVICE'\'', if_true: files('\''my_i2c_device.c'\''))' hw/i2c/meson.build
 cat <<EOF >> hw/i2c/Kconfig
 
 config MY_I2C_DEVICE
@@ -37,7 +37,7 @@ make -j$(nproc)
 ```
 ./qemu-system-x86_64 \
     -m 1024 \
-    -hda ../images/debian-12-nocloud-amd64.qcow2 \
+    -hda ../../images/debian-12-nocloud-amd64.qcow2 \
     -device my-i2c-device,id=i2c,address=0x60 \
     -enable-kvm \
     -nographic \
@@ -52,6 +52,8 @@ python qmp.py
 
 Inside the VM:
 ```
+apt update && apt install -y i2c-tools
+modprobe i2c-dev
 i2cdetect -y 0 
 i2cget -y 0 0x60 
 i2cset -y 0 0x60 0x11 
